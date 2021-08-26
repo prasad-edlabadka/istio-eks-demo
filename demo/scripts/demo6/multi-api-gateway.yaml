@@ -1,0 +1,42 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: multiple-api-gateway
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: multiple-api
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - multiple-api-gateway
+  http:
+  - match:
+    - uri:
+        exact: /v2/store/inventory
+    route:
+    - destination:
+        host: multiple-api
+        port:
+          number: 9080
+  - match:
+    - uri:
+        exact: /v2/account/balance
+    route:
+    - destination:
+        host: multiple-api
+        port:
+          number: 9081
+

@@ -1,0 +1,60 @@
+##################################################################################################
+# Details service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: multiple-api
+  labels:
+    app: multiple-api
+    service: multiple-api
+spec:
+  ports:
+  - port: 9080
+    name: http
+    targetPort: 9080
+    protocol: TCP
+  - port: 9081
+    name: https
+    targetPort: 9081
+    protocol: TCP
+  selector:
+    app: multiple-api
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: bookinfo-multiple-api
+  labels:
+    account: multiple-api
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: multiple-api-v1
+  labels:
+    app: multiple-api
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: multiple-api
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: multiple-api
+        version: v1
+    spec:
+      serviceAccountName: bookinfo-multiple-api
+      containers:
+      - name: multiple-api
+        image: docker.io/prasadedlabadkar/istio-demo:multi-container-v1
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9080
+        - containerPort: 9081
+        securityContext:
+          runAsUser: 1000
+---

@@ -1,0 +1,47 @@
+---
+swagger: "2.0"
+info:
+  description: "This is a sample server Accounts server"
+  version: "1.0.0"
+  title: "Swagger Petstore"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "apiteam@swagger.io"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "petstore.swagger.io"
+basePath: "/v2"
+tags:
+- name: "account"
+  description: "Access to Personal Accounts"
+schemes:
+- "https"
+- "http"
+paths:
+  /account/balance:
+    get:
+      tags:
+      - "account"
+      summary: "Returns current account balance"
+      description: "Returns a map of various account "
+      operationId: "getAccountBalance"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              type: "object"
+              properties:
+                balanceType:
+                  type: "string"
+                amount:
+                  type: "integer"
+                  format: "int32"
+                currency:
+                  type: "string"
+      x-swagger-router-controller: "Account"
